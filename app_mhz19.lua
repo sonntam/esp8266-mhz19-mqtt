@@ -156,6 +156,16 @@ local function mqtt_start()
 
 end
 
+local function after_warmup_mhz19()
+  mhz19_attach_interrupt()
+  listen_telnet()
+end
+
+local function listen_telnet()
+  -- Start the telnet server
+  telnet:open(nil, nil, config.TELNET.PORT)
+end
+
 local function mhz19_attach_interrupt()
   gpio.mode(config.HW.MHZ19_PIN, gpio.INT)
   gpio.trig(config.HW.MHZ19_PIN, "both", mhz19InterruptHandler)
@@ -185,8 +195,6 @@ function module.start()
     else
       mhz19_attach_interrupt()
     end
-  
-    --telnet:open(nil, nil, config.TELNET.PORT)
   
     mqtt_start()
   end)
