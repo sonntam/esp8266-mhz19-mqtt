@@ -9,6 +9,11 @@ local lowDuration   = 0
 local highDuration  = 0
 local lastTimestamp = 0
 
+local ageMaxValDay  = 0
+local ageMaxValHour = 0
+local MaxValDay     = 0
+local MaxValHour    = 0
+
 local latestMeasurements = {}
 
 local function wemos_d1_toggle_led()
@@ -49,15 +54,58 @@ local function mhz19_median_value()
     end
 end
 
+-- Updates and gets the maximum value for the last 24h
+local function mhz19_maxval_day(curval)
+
+    local timeNow = tmr.time()
+    
+    if (ageMaxValDay == 0) then
+        -- First sample
+        ageMaxValDay = timeNow
+        MaxValDay    = curval
+    end
+
+    if (curval ~= nil and (timeNow - ageMaxValDay > 24 * 3600 or curval > MaxValDay or timeNow < ageMaxValHour)) then
+        ageMaxValDay = timeNow
+        MaxValDay    = curval
+    end
+    
+    return MaxValDay
+end
+
+-- Updates and gets the maximum value for the last hour
+local function mhz19_maxval_hour(curval)
+
+    local timeNow = tmr.time()
+
+    if (ageMaxValHour == 0) then
+        -- First sample
+        ageMaxValHour = timeNow
+        MaxValHour    = curval
+    end
+
+    if (curval ~= nil and (timeNow - ageMaxValHour > 3600 or curval > MaxValHour or timeNow < ageMaxValHour)) then
+        ageMaxValHour = timeNow
+        MaxValHour    = curval
+    end
+    
+    return MaxValHour
+end
+
 -- Sends a simple ping to the broker
 local function mqtt_send_ping()
-    local rssi   = wifi.sta.getrssi()
-    local median = mhz19_median_value()
+    local rssi       = wifi.sta.getrssi()
+    local median     = mhz19_median_value()
+    local maxvalDay  = mhz19_maxval_day(median)
+    local maxvalHour = mhz19_maxval_hour(median)
+    
     m:publish(config.MQTT.ENDPOINT .. "id", config.MQTT.ID,0,0)
     m:publish(config.MQTT.ENDPOINT .. "value", median or "null",0,0)
+    m:publish(config.MQTT.ENDPOINT .. "value/maxday", maxvalDay or "null",0,0)
+    m:publish(config.MQTT.ENDPOINT .. "value/maxhour", maxvalHour or "null",0,0)
     m:publish(config.MQTT.ENDPOINT .. "unit", "ppm",0,0)
     m:publish(config.MQTT.ENDPOINT .. "rssi", rssi,0,0)
-    print("id:", config.MQTT.ID, "; rssi:", rssi, "dBm; CO2 median:", median,"ppm" )
+    print("id:", config.MQTT.ID, "; rssi:", rssi, "dBm; CO2 median:", median,"ppm", "; daymax:", maxvalDay,"ppm","; hourmax:", maxvalHour,"ppm" )
 end
 
 -- Sends my id to the broker for registration
