@@ -8,7 +8,7 @@ module.SSID["***REMOVED***"] = "***REMOVED***"
 --[[ MQTT setup ]]--
 module.MQTT = {}
 module.MQTT.FRIENDLYNAME = "MH-Z19_Bedroom"
-module.MQTT.HOST         = "raspberrypi4.fritz.box"
+module.MQTT.HOST         = "192.168.0.48"  -- raspberrypi4.fritz.box
 module.MQTT.PORT         = 1883
 module.MQTT.USER         = "mqtt_home"
 module.MQTT.PASSWORD     = "***REMOVED***"
