@@ -128,7 +128,7 @@ function module.start()
   gpio.write(config.HW.LED_PIN, gpio.HIGH)
   
   -- blink reset reason
-  gpio.serout(config.HW.LED_PIN, gpio.LOW, {750000,250000},reset_reason+1, function()
+  gpio.serout(config.HW.LED_PIN, gpio.LOW, {150000,50000},reset_reason+1, function()
     -- configure reading MH-Z19
     if (reset_reason == 0 or reset_reason == 6) then
       print("Warming up sensor...")
