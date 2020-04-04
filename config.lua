@@ -2,7 +2,7 @@ local module = {}
 
 --[[ WiFi Setup ]]--
 module.SSID = {}
-module.SSID["***REMOVED***"] = "***REMOVED***"
+module.SSID["WIFI NAME HERE"] = "PASSWORD HERE"
 -- add more WiFi networks if needed
 
 --[[ MQTT setup ]]--
@@ -10,8 +10,8 @@ module.MQTT = {}
 module.MQTT.FRIENDLYNAME = "MH-Z19_Bedroom"
 module.MQTT.HOST         = "192.168.0.48"  -- raspberrypi4.fritz.box
 module.MQTT.PORT         = 1883
-module.MQTT.USER         = "mqtt_home"
-module.MQTT.PASSWORD     = "***REMOVED***"
+module.MQTT.USER         = "USERNAME_HERE"
+module.MQTT.PASSWORD     = "PASSWORD_HERE"
 module.MQTT.ENDPOINT     = "nodemcu/" .. module.MQTT.FRIENDLYNAME .. "_" .. node.chipid() .. "/"
 module.MQTT.ID           = node.chipid()
 
