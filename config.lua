@@ -17,7 +17,7 @@ module.MQTT.ID           = node.chipid()
 
 --[[ Hardware wiring setup ]]--
 module.HW = {}
-module.HW.MHZ19_PIN  = 3    -- Pin where the PWM output of the MH-Z19 is connected
+module.HW.MHZ19_PIN  = 2    -- Pin where the PWM output of the MH-Z19 is connected
 module.HW.MZZ19_MAX  = 5000 -- Maximum ppm measurement of the sensor (there is a 2000ppm and a 5000pm type) 
 module.HW.DHT_PIN    = 4    -- Pin where the output of the DHT is connected
 module.HW.LED_PIN    = 4    -- Pin where the on-board LED is connected
